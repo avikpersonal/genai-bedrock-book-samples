@@ -1,0 +1,180 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'This CloudFormation template creates an Amazon SageMaker domain with IAM roles and policies for the Amazon Bedrock Book. It is intended for practice purposes and does not adhere to least privilege best practices. You can use this template as a foundation and modify it to implement least privilege based on your specific requirements.' 
+
+Parameters:
+  UserProfileName:
+    Type: String
+    Description: The user profile name for the SageMaker and Amazon Bedrock
+    Default: 'genalbookbedrocksagemakeruser'
+
+Resources:
+
+  # SageMaker UserProfile
+  GenAIBookBedrockSageMakerUser:
+    Type: AWS::SageMaker::UserProfile
+    Properties: 
+      DomainId: !GetAtt GenAIBookBedrockSageMakerDomain.DomainId
+      UserProfileName: !Ref UserProfileName
+      UserSettings:
+        ExecutionRole: !GetAtt GenAIBookBedrockSageMakerExecutionRole.Arn
+
+  # Lambda function to get default VPC and subnets
+  DefaultVpcLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: CFGetDefaultVpcId
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import cfnresponse
+
+          ec2 = boto3.client('ec2')
+
+          def lambda_handler(event, context):              
+              if 'RequestType' in event and event['RequestType'] == 'Create':
+                  vpc_id = get_default_vpc_id()
+                  subnets =  get_subnets_for_vpc(vpc_id)
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, {'VpcId': vpc_id , "Subnets" : subnets}, '')
+              else:
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, {},'')
+
+          def get_default_vpc_id():
+              vpcs = ec2.describe_vpcs(Filters=[{'Name': 'is-default', 'Values': ['true']}])
+              vpcs = vpcs['Vpcs']
+              vpc_id = vpcs[0]['VpcId']
+              return vpc_id
+
+
+          def get_subnets_for_vpc(vpcId):
+              response = ec2.describe_subnets(
+                  Filters=[
+                      {
+                          'Name': 'vpc-id',
+                          'Values': [vpcId]
+                      }
+                  ]
+              )
+              subnet_ids = []
+              for subnet in response['Subnets']:
+                  subnet_ids.append(subnet['SubnetId'])
+              return subnet_ids 
+      Description: Return default VPC ID and Subnets
+      Handler: index.lambda_handler
+      MemorySize: 512
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: python3.9
+      Timeout: 5
+
+  # Custom resource to use the Lambda function
+  DefaultVpcFinder:
+    Type: Custom::ResourceForFindingDefaultVpc
+    Properties:
+      ServiceToken: !GetAtt DefaultVpcLambda.Arn
+
+  # IAM role for Lambda function execution without least privilege. It is intended for practice purposes and does not adhere to least privilege best practices. 
+  # You can use this template as a foundation and modify it to implement least privilege based on your specific requirements. 
+  LambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Path: /
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+        - 'arn:aws:iam::aws:policy/IAMFullAccess'
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
+
+
+  # SageMaker Domain resource with minimal privileges for execution
+  GenAIBookBedrockSageMakerDomain:
+    Type: AWS::SageMaker::Domain
+    Properties:
+      AuthMode: IAM
+      DomainName: genai-bedrock-book-sagemaker-basic
+      DefaultUserSettings:
+        ExecutionRole: !GetAtt GenAIBookBedrockSageMakerExecutionRole.Arn
+      SubnetIds: !GetAtt DefaultVpcFinder.Subnets
+      VpcId: !GetAtt DefaultVpcFinder.VpcId
+
+  # IAM Role for SageMaker and Bedrock execution with least privilege. It is intended for practice purposes and does not adhere to least privilege best practices. 
+  # You can use this template as a foundation and modify it to implement least privilege based on your specific requirements. 
+  GenAIBookBedrockSageMakerExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: sagemaker.amazonaws.com
+            Action: sts:AssumeRole
+          - Effect: Allow
+            Principal:
+              Service: bedrock.amazonaws.com
+            Action: sts:AssumeRole
+          - Effect: Allow
+            Principal:
+              Service: aoss.amazonaws.com
+            Action: sts:AssumeRole
+
+      Policies:
+        - PolicyName: genai-bedrock-book-Sagemaker-basic-ExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sagemaker:*
+                Resource: '*'
+        - PolicyName: genai-bedrock-book-Bedrock-basic-ExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - bedrock:*
+                Resource: '*'
+        - PolicyName: genai-bedrock-book-aoss-basic-ExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - aoss:*
+                Resource: '*'
+        - PolicyName: genai-bedrock-book-s3-knowledgebases-basic-ExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:*
+                Resource: '*'
+        - PolicyName: genai-bedrock-book-iam-basic-ExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - iam:*
+                Resource: '*'
+
+Outputs:
+  GenAIBookBedrockSageMakerDomainArn:
+    Value: !GetAtt GenAIBookBedrockSageMakerDomain.DomainArn
+    Description: ARN of the created SageMaker domain
+  GenAIBookBedrockSageMakerExecutionRoleArn:
+    Value: !GetAtt GenAIBookBedrockSageMakerExecutionRole.Arn
+    Description: ARN of the IAM role for SageMaker execution
+
+    
