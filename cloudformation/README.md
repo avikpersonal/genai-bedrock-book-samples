@@ -1,16 +1,20 @@
-### github name: genai-bedrock-book-samples
-### Folder: cloudformation
-### Book Name: A Definitive Guide to Generative AI with Amazon Bedrock
-### Chapter: 3
-### Chapter Name: Introduction to Amazon Bedrock
+##### Github name: genai-bedrock-book-samples
+##### Folder: cloudformation
+##### Book Name: A Definitive Guide to Generative AI with Amazon Bedrock
+##### Chapter: 3
+##### Chapter Name: Introduction to Amazon Bedrock
 
 ---
 
-title : Provisioning Amazon SageMaker domain in your own AWS account for **A Definitive Guide to Generative AI with Amazon Bedrock** Book code hands on
+Section 1: Executing AWS Cloud Formation scripts
+Purpose : Provisioning resources in your own AWS account for **A Definitive Guide to Generative AI with Amazon Bedrock** Book code hands on
 
 ---
 
 To expedite the implementation of practising all the exercise of **A Definitive Guide to Generative AI with Amazon Bedrock** book, you can use the AWS Cloud Formation template [AWS CloudFormation](https://aws.amazon.com/cloudformation/) for your convenience. AWS CloudFormation serves as a powerful management tool, enabling you to define and provision all necessary infrastructure resources within AWS using a unified and standardized language.
+
+> [!Disclamer]
+> This CloudFormation template creates an Amazon SageMaker domain with IAM roles and policies for the Amazon Bedrock Book. It is intended for practice purposes and does not adhere to least privilege best practices. You can use this template as a foundation and modify it to implement least privilege based on your specific requirements. 
 
 The AWS CloudFormation template will create following things: 
 
@@ -30,11 +34,11 @@ The AWS CloudFormation template will create following things:
 
     5. SageMaker Domain (GenAIBookBedrockSageMakerDomain): Creates a SageMaker domain that uses IAM authentication, with default user settings tied to the execution role (GenAIBookBedrockSageMakerExecutionRole). It also includes network configurations using the default VPC and subnet IDs.
 
-SageMaker Execution Role (GenAIBookBedrockSageMakerExecutionRole): Defines an IAM role for executing SageMaker, Bedrock, and AOSS tasks. This role has attached policies granting broad access to SageMaker, Bedrock, AOSS, S3, and IAM services, though the template advises modification to adhere to the least privilege principle.
+    6. SageMaker Execution Role (GenAIBookBedrockSageMakerExecutionRole): Defines an IAM role for executing SageMaker, Bedrock, and AOSS tasks. This role has attached policies granting broad access to SageMaker, Bedrock, AOSS, S3, and IAM services, though the template advises modification to adhere to the least privilege principle.
 
-Outputs:
+**Outputs:**
 
-Provides the Amazon Resource Names (ARNs) for the created SageMaker domain and execution role, which can be referenced in other AWS resources or applications.
+    1. Provides the Amazon Resource Names (ARNs) for the created SageMaker domain and execution role, which can be referenced in other AWS resources or applications.
 
 ## Prerequisite
 
