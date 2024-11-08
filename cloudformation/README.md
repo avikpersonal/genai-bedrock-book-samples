@@ -67,23 +67,21 @@ We create required resources with AWS CloudFormation, including Amazon SageMaker
 
 ![cft_launch_page](https://github.com/avikbhaaws/genai-bedrock-book-samples/blob/main/cloudformation/image/1_cft_launch_page.png)
 
-2. Choose **Choose an existing template**. Choose **Upload a template file**. 
+3. Choose **Choose an existing template**. Choose **Upload a template file**. 
 
-3. Choose File **genai-bedrock-book-samples-sagemaker-basic.yml**. Click **Next**.
+4. Choose File **genai-bedrock-book-samples-sagemaker-basic.yml**. Click **Next**.
 
-4. Provide **Stack name**. 
+5. Provide **Stack name**. 
 
-5. Leave **UserProfileName** parameter at their default values. Click **Next**.
+6. Leave **UserProfileName** parameter at their default values. Click **Next**.
 
 ![cft_create_page](../cloudformation/image/2_cft_create_page.png)
 
-6. **scroll down**. After verifying all the options, acknowledge the message for IAM resource creation as mentioned in the following screenshot and click on the **Next** buttion.
+7. **scroll down**. After verifying all the options, acknowledge the message for IAM resource creation as mentioned in the following screenshot and click on the **Next** buttion.
 
 ![cft_ack_page](../cloudformation/image/3_cft_ack_page.png)
 
-7. **scroll down**. After verifying all the options, click on the **Submit** buttion.
-
-![cft_ack_page](../cloudformation/image/3_cft_ack_page.png)
+8. **scroll down**. After verifying all the options, click on the **Submit** buttion.
 
     * The stack takes about 10 minutes to complete.
     * Now that the CloudFormation stack is complete.
@@ -111,35 +109,37 @@ Executing Jupyter Notebooks and cloning example source code enables hands-on lea
 
 ![2_How-it-works-Amazon-SageMaker-us-east-1](../cloudformation/image/2_How-it-works-Amazon-SageMaker-us-east-1.png)
 
-3. Click **genai-bedrock-book-sagemaker-basic** in the **Domains** section. Click **User profiles**.
+3. You will view **genai-bedrock-book-sagemaker-basic** as **Domain**. 
+
+4. Click **genai-bedrock-book-sagemaker-basic** in the **Domains** section. Click **User profiles**.
 
 ![3_Domains-Amazon-SageMaker-us-east-1](../cloudformation/image/3_Domains-Amazon-SageMaker-us-east-1.png)
 
-4. Click **Launch**. Click **Studio**.
+5. Click **Launch**. Click **Studio**.
 
 ![4_Domain-GenAIDomain-Domains-Amazon-SageMaker-us-east-1](../cloudformation/image/4_Domain-GenAIDomain-Domains-Amazon-SageMaker-us-east-1.png)
 
-5. Wait for the **Amazon SageMaker Studio** to come online. It will take **~2-3 mins** to open **Amazon SageMaker Studio**.
+6. Wait for the **Amazon SageMaker Studio** to come online. It will take **~2-3 mins** to open **Amazon SageMaker Studio**.
 
 ![5_Creating-application-SageMaker-Studio](../cloudformation/image/5_Creating-application-SageMaker-Studio.png)
 
-6. This takes you to **Amazon SageMaker Studio**. Click **Studio Clasic**.
+7. This takes you to **Amazon SageMaker Studio**. Click **Studio Clasic**.
 
 ![6a_sagenmaker_pic](../cloudformation/image/6a_sagenmaker_pic.png)
 
-7. Click **Run** in the **Amazon SageMaker Studio**. 
+8. Click **Run** in the **Amazon SageMaker Studio**. 
 
 ![6b_sagemaker_pic](../cloudformation/image/6b_sagemaker_pic.png)
 
-8. Click **Open** in the **Amazon SageMaker Studio**. 
+9. Click **Open** in the **Amazon SageMaker Studio**. 
 
 ![b6_sagemaker_pic](../cloudformation/image/b6_sagemaker_pic.png)
 
-9. This takes you to **Amazon SageMaker Studio**.
+10. This takes you to **Amazon SageMaker Studio**.
 
 ![6_lab-JupyterLab](../cloudformation/image/6_lab-JupyterLab.png)
 
-10. Click **File**. Choose **New**. Choose **Terminal**.
+11. Click **File**. Choose **New**. Choose **Terminal**.
 
 ![6d_sagemaker_terminal](../cloudformation/image/6d_sagemaker_terminal.png)
 
@@ -155,13 +155,13 @@ git clone < Git Repository Name>
 > [!NOTE]
 > Git Repository Name: Please refer book Appendix section. 
 
-2. Click *File Browser** in the left side panel of **Amazon SageMaker Studio** to view all code files. 
+2. Click **File Browser** in the left side panel of **Amazon SageMaker Studio** to view all code files. 
 
 ![6e_sagemaker_file](../cloudformation/image/6e_sagemaker_file.png)
 
 3. Click *chapter3*. Open **simple_sagemaker_bedrock.ipynb** file. 
 
-4. Use *Image* as **Data Science 3.0**. *Kernel* as **Python 3**. *Instance* as **ml.t3.large**. Click **Create Notebook**.
+4. Use *Image* as **Data Science 3.0**. *Kernel* as **Python 3**. *Instance* as **ml.t3.medium**. Click **Create Notebook**.
 
 ![7_lab-JupyterLab_2](../cloudformation/image/7_lab-JupyterLab_2.png)
 
