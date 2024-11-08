@@ -1,19 +1,23 @@
+---
+
+# Chapter Name: Introduction to Amazon Bedrock
+##### Chapter: 3 
 ##### Github name: genai-bedrock-book-samples
 ##### Folder: cloudformation
 ##### Book Name: A Definitive Guide to Generative AI with Amazon Bedrock
-##### Chapter: 3
-##### Chapter Name: Introduction to Amazon Bedrock
 
 ---
 
-Section 1: Executing AWS Cloud Formation scripts
+---
+
+<ins>Section 1</ins>: Executing AWS Cloud Formation scripts
 Purpose : Provisioning resources in your own AWS account for **A Definitive Guide to Generative AI with Amazon Bedrock** Book code hands on
 
 ---
 
 To expedite the implementation of practising all the exercise of **A Definitive Guide to Generative AI with Amazon Bedrock** book, you can use the AWS Cloud Formation template [AWS CloudFormation](https://aws.amazon.com/cloudformation/) for your convenience. AWS CloudFormation serves as a powerful management tool, enabling you to define and provision all necessary infrastructure resources within AWS using a unified and standardized language.
 
-> [!Disclamer]
+> [!CAUTION]
 > This CloudFormation template creates an Amazon SageMaker domain with IAM roles and policies for the Amazon Bedrock Book. It is intended for practice purposes and does not adhere to least privilege best practices. You can use this template as a foundation and modify it to implement least privilege based on your specific requirements. 
 
 The AWS CloudFormation template will create following things: 
@@ -54,7 +58,9 @@ us-east-1
 
 We create required resources with AWS CloudFormation, including Amazon SageMaker domain, Amazon SageMaker domain user, AWS Lambda function, and [AWS Identity and Access Management](https://aws.amazon.com/iam/) (IAM) role. Complete the following steps:
 
-1. To launch the CloudFormation stack, choose [**Launch Stack**](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create). 
+1. Ensure that you are logged into the AWS console with your credentials.
+
+2. To launch the CloudFormation stack, choose [**Launch Stack**](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create). 
 
 ![cft_launch_page](https://github.com/avikbhaaws/genai-bedrock-book-samples/blob/main/cloudformation/image/1_cft_launch_page.png)
 
@@ -64,21 +70,30 @@ We create required resources with AWS CloudFormation, including Amazon SageMaker
 
 4. Provide **Stack name**. 
 
-5. Leave **UserProfileName** parameter at their default values.
+5. Leave **UserProfileName** parameter at their default values. Click **Next**.
 
 ![cft_create_page](https://github.com/avikbhaaws/genai-bedrock-book-samples/blob/main/cloudformation/image/2_cft_create_page.png)
 
-6. **scroll down**. Click **Next**.
-
-7. **scroll down**. After verifying all the options, acknowledge the message for IAM resource creation as mentioned in the following screenshot and click on the **Submit** buttion.
+6. **scroll down**. After verifying all the options, acknowledge the message for IAM resource creation as mentioned in the following screenshot and click on the **Next** buttion.
 
 ![cft_ack_page](https://github.com/avikbhaaws/genai-bedrock-book-samples/blob/main/cloudformation/image/3_cft_ack_page.png)
 
-    * The stack takes about 2 minutes to complete.
+7. **scroll down**. After verifying all the options, click on the **Submit** buttion.
+
+![cft_ack_page](https://github.com/avikbhaaws/genai-bedrock-book-samples/blob/main/cloudformation/image/3_cft_ack_page.png)
+
+    * The stack takes about 10 minutes to complete.
     * Now that the CloudFormation stack is complete.
+
+
+###### Account allowlisting
+To run this source code, your account must be included on the Amazon Bedrock allowlist. Please ensure that your account is activated and allowlisted before executing this source code.
+
+> [!CAUTION]
+> Costs when running from your own account
+> If you are running this in your own account, please be aware that costs may be incurred. The exact expenses depend on factors such as the frequency of your calls to Bedrock, the length of tokens or the size of images in your calls, and the specific models you utilize. For detailed pricing information for each model, please refer to the Amazon Bedrock console. Even, you will get specific note before every exercises. 
 
 
 ## Clean up
 
 If you dont want to continue with this hands on exercise further, Please follow the **Delete** the AWS CloudFormation stack to avoid incurring future charges and to clean up unused roles and policies, delete the resources you created as part of the execution of the AWS CloudFormation stack. 
-
