@@ -10,8 +10,8 @@
 
 ---
 
-<b style="color:red;"><ins>Git Basics</ins></b>: Executing AWS Cloud Formation scripts
-Purpose : Provisioning resources in your own AWS account for **A Definitive Guide to Generative AI with Amazon Bedrock** Book code hands on
+### **Git Basics**: Executing AWS CloudFormation scripts  
+**Purpose**: Provisioning resources in your AWS account for **A Definitive Guide to Generative AI with Amazon Bedrock** book hands-on exercises.
 
 ---
 
