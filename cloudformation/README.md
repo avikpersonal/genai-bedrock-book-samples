@@ -65,7 +65,7 @@ We create required resources with AWS CloudFormation, including Amazon SageMaker
 
 2. To launch the CloudFormation stack, choose [**Launch Stack**](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create). 
 
-![cft_launch_page](https://github.com/avikbhaaws/genai-bedrock-book-samples/blob/main/cloudformation/image/1_cft_launch_page.png)
+![cft_launch_page](../cloudformation/image/1_cft_launch_page.png)
 
 3. Choose **Choose an existing template**. Choose **Upload a template file**. 
 
@@ -161,11 +161,20 @@ git clone < Git Repository Name>
 
 3. Click *chapter3*. Open **simple_sagemaker_bedrock.ipynb** file. 
 
-4. Use *Image* as **Data Science 3.0**. *Kernel* as **Python 3**. *Instance* as **ml.t3.medium**. Click **Create Notebook**.
+4. Use *Image* as **Data Science 3.0**. *Kernel* as **Python 3**. *Instance* as **ml.t3.medium**.
 
 ![7_lab-JupyterLab_2](../cloudformation/image/7_lab-JupyterLab_2.png)
 
 5. Read and follow all the steps of **simple_sagemaker_bedrock.ipynb** file. 
+
+### File Name: simple_sagemaker_bedrock.ipynb
+### Purpose: 
+    1. Understanding Amazon Bedrock client and Amazon Bedrock runtime client.
+    2. Understanding of list_foundation_models API.
+    3. Example of Amazon Titan LLM foundation model with and without parameters.
+    4. Example of Anthropic LLM foundation model with and without parameters.
+    5. Example of Amazon Titan Image foundation model with and without parameters.
+    6. Example of Amazon Titan LLM foundation model with streaming API with and with out parameters.
 
 > [!CAUTION]
 > Costs when running from your own account
