@@ -7,14 +7,14 @@
 
 ---
 
-<ins>Chapter 3</ins>: AWS Cloud Formation Template
+<ins>cloudformation folder</ins>: AWS Cloud Formation Template
 Purpose : Provisioning resources in your own AWS account for **A Definitive Guide to Generative AI with Amazon Bedrock** Book code hands on. This is a one time activity to execute the Cloud Formation Template. Make sure to **Delete** the **Stack** if you are not using. Follow **Clean Up** section. 
 
 ---
 
 ---
 
-<ins>Other Chapters</ins>: Python code bases
+<ins>other folders</ins>: Python code bases
 Purpose : It is recommended to read the **README** file in each chapter folder.
 
 ---
