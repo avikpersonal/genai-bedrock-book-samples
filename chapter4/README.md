@@ -1,9 +1,9 @@
 ---
 
 # Chapter Name: Introduction to Amazon Bedrock
-##### Chapter: 3 
+##### Chapter: 4 
 ##### Github name: genai-bedrock-book-samples
-##### Folder: chapter3
+##### Folder: chapter4
 ##### Book Name: A Definitive Guide to Generative AI with Amazon Bedrock
 
 ---
@@ -91,7 +91,7 @@ git clone < Git Repository Name>
 
 ![6e_sagemaker_file](../image/6e_sagemaker_file.png)
 
-3. Click *chapter3*. Open **simple_converse_api.ipynb** file. 
+3. Click *chapter4*. Open **simple_converse_api.ipynb** file. 
 
 4. Use *Image* as **Data Science 3.0**. *Kernel* as **Python 3**. *Instance* as **ml.t3.medium**.
 
