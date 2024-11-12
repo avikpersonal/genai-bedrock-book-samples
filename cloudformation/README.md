@@ -87,7 +87,6 @@ We create required resources with AWS CloudFormation, including Amazon SageMaker
     * Now that the CloudFormation stack is complete.
 
 > [!CAUTION]
-> Costs when running from your own account
 > If you are running this in your own account, please be aware that costs may be incurred. The exact expenses depend on factors such as the frequency of your calls to Bedrock, the length of tokens or the size of images in your calls, and the specific models you utilize. For detailed pricing information for each model, please refer to the Amazon Bedrock console. Even, you will get specific note before every exercises. 
 
 ## Clean up
