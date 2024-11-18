@@ -3,7 +3,7 @@
 # Chapter Name: Overview of Prompt Management
 ##### Chapter: 15 
 ##### Github name: genai-bedrock-book-samples
-##### Folder: chapter6
+##### Folder: chapter15
 ##### Book Name: A Definitive Guide to Generative AI with Amazon Bedrock
 
 ---
@@ -99,7 +99,7 @@ git clone < Git Repository Name>
 
 5. Read and follow all the steps of **simple_prompt_mgmt.ipynb** file. 
 
-### File Name: simple_rag_building_langchain.ipynb
+### File Name: simple_prompt_mgmt.ipynb
 ### Purpose: 
         1. Create a prompt using Prompt management
         2. Modify a prompt using Prompt management 
