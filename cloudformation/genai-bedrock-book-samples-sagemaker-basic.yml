@@ -19,10 +19,10 @@ Resources:
         ExecutionRole: !GetAtt GenAIBookBedrockSageMakerExecutionRole.Arn
 
   # Lambda function to get default VPC and subnets
-  DefaultVpcLambda:
+  DefaultVpcLambdaBook:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: CFGetDefaultVpcId
+      FunctionName: CFGetDefaultVpcIdBook
       Code:
         ZipFile: |
           import json
@@ -66,11 +66,152 @@ Resources:
       Runtime: python3.9
       Timeout: 5
 
+  # This Lambda manages video parlour bookings via DynamoDB, supporting creation, retrieval, and calcellation of the booking slots
+  GenAIBookBedrockLambdaAgent:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "video-parlour-bookings-lambda"
+      Code:
+        ZipFile: |
+          import json
+          import uuid
+          import boto3
+
+          dynamodb = boto3.resource('dynamodb')
+          table = dynamodb.Table('video-game-parlour-bookings')
+
+          def get_named_parameter(event, name):
+              """
+              Get a parameter from the lambda event
+              """
+              return next(item for item in event['parameters'] if item['name'] == name)['value']
+
+
+          def get_slot_booking_details(slot_booking_id):
+              """
+              Retrieve details of a restaurant booking
+              
+              Args:
+                  booking_id (string): The ID of the booking to retrieve
+              """
+              try:
+                  response = table.get_item(Key={'slot_booking_id': slot_booking_id})
+                  if 'Item' in response:
+                      return response['Item']
+                  else:
+                      return {'message': f'No booking found with ID {slot_booking_id}'}
+              except Exception as e:
+                  return {'error': str(e)}
+
+
+          def create_slot_booking(date, name, hour, num_guests):
+              """
+              Create a new restaurant booking
+              
+              Args:
+                  date (string): The date of the booking
+                  name (string): Name to idenfity your reservation
+                  hour (string): The hour of the booking
+                  num_guests (integer): The number of guests for the booking
+              """
+              try:
+                  slot_booking_id = str(uuid.uuid4())[:8]
+                  table.put_item(
+                      Item={
+                          'slot_booking_id': slot_booking_id,
+                          'date': date,
+                          'name': name,
+                          'hour': hour,
+                          'num_guests': num_guests
+                      }
+                  )
+                  return {'slot_booking_id': slot_booking_id}
+              except Exception as e:
+                  return {'error': str(e)}
+
+
+          def cancel_slot_booking(slot_booking_id):
+              """
+              Delete an existing restaurant booking
+              
+              Args:
+                  booking_id (str): The ID of the booking to delete
+              """
+              try:
+                  response = table.delete_item(Key={'slot_booking_id': slot_booking_id})
+                  if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+                      return {'message': f'Booking with ID {slot_booking_id} deleted successfully'}
+                  else:
+                      return {'message': f'Failed to delete booking with ID {slot_booking_id}'}
+              except Exception as e:
+                  return {'error': str(e)}
+              
+
+          def lambda_handler(event, context):
+              # get the action group used during the invocation of the lambda function
+              actionGroup = event.get('actionGroup', '')
+              
+              # name of the function that should be invoked
+              function = event.get('function', '')
+              
+              # parameters to invoke function with
+              parameters = event.get('parameters', [])
+
+              if function == 'get_slot_booking_details':
+                  slot_booking_id = get_named_parameter(event, "slot_booking_id")
+                  if slot_booking_id:
+                      response = str(get_slot_booking_details(slot_booking_id))
+                      responseBody = {'TEXT': {'body': json.dumps(response)}}
+                  else:
+                      responseBody = {'TEXT': {'body': 'Missing slot_booking_id parameter'}}
+
+              elif function == 'create_slot_booking':
+                  date = get_named_parameter(event, "date")
+                  name = get_named_parameter(event, "name")
+                  hour = get_named_parameter(event, "hour")
+                  num_guests = get_named_parameter(event, "num_guests")
+
+                  if date and hour and num_guests:
+                      response = str(create_slot_booking(date, name, hour, num_guests))
+                      responseBody = {'TEXT': {'body': json.dumps(response)}}
+                  else:
+                      responseBody = {'TEXT': {'body': 'Missing required parameters'}}
+
+              elif function == 'cancel_slot_booking':
+                  slot_booking_id = get_named_parameter(event, "slot_booking_id")
+                  if slot_booking_id:
+                      response = str(cancel_slot_booking(slot_booking_id))
+                      responseBody = {'TEXT': {'body': json.dumps(response)}}
+                  else:
+                      responseBody = {'TEXT': {'body': 'Missing slot_booking_id parameter'}}
+
+              else:
+                  responseBody = {'TEXT': {'body': 'Invalid function'}}
+
+              action_response = {
+                  'actionGroup': actionGroup,
+                  'function': function,
+                  'functionResponse': {
+                      'responseBody': responseBody
+                  }
+              }
+
+              function_response = {'response': action_response, 'messageVersion': event['messageVersion']}
+              print("Response: {}".format(function_response))
+
+              return function_response
+      Description: GenAIBookBedrockLambdaAgent
+      Handler: index.lambda_handler
+      MemorySize: 512
+      Role: !GetAtt GenAIBookBedrockSageMakerExecutionRole.Arn
+      Runtime: python3.12
+      Timeout: 120
+
   # Custom resource to use the Lambda function
   DefaultVpcFinder:
     Type: Custom::ResourceForFindingDefaultVpc
     Properties:
-      ServiceToken: !GetAtt DefaultVpcLambda.Arn
+      ServiceToken: !GetAtt DefaultVpcLambdaBook.Arn
 
   # IAM role for Lambda function execution without least privilege. It is intended for practice purposes and does not adhere to least privilege best practices. 
   # You can use this template as a foundation and modify it to implement least privilege based on your specific requirements. 
@@ -106,6 +247,25 @@ Resources:
       SubnetIds: !GetAtt DefaultVpcFinder.Subnets
       VpcId: !GetAtt DefaultVpcFinder.VpcId
 
+  # This CloudFormation resource creates a DynamoDB table named video-game-parlour-bookings with slot_booking_id as the partition key and sets read/write throughput to 5 units. 
+  # It also tags the table with the Environment key set to Book.
+  GenAIBookBedrockDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "video-game-parlour-bookings"
+      AttributeDefinitions:
+        - AttributeName: "slot_booking_id"
+          AttributeType: S
+      KeySchema:
+        - AttributeName: "slot_booking_id"
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      Tags:
+        - Key: "Environment"
+          Value: "Book"
+
   # IAM Role for SageMaker and Bedrock execution with least privilege. It is intended for practice purposes and does not adhere to least privilege best practices. 
   # You can use this template as a foundation and modify it to implement least privilege based on your specific requirements. 
   GenAIBookBedrockSageMakerExecutionRole:
@@ -117,6 +277,14 @@ Resources:
           - Effect: Allow
             Principal:
               Service: sagemaker.amazonaws.com
+            Action: sts:AssumeRole
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+          - Effect: Allow
+            Principal:
+              Service: dynamodb.amazonaws.com
             Action: sts:AssumeRole
           - Effect: Allow
             Principal:
@@ -136,6 +304,23 @@ Resources:
                 Action:
                   - sagemaker:*
                 Resource: '*'
+        - PolicyName: genai-bedrock-book-DynamoDBAccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:*
+                Resource: arn:aws:dynamodb:*:*:table/*
+        - PolicyName: genai-bedrock-book-LambdaExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:*
+                  - logs:*
+                Resource: "*"
         - PolicyName: genai-bedrock-book-Bedrock-basic-ExecutionPolicy
           PolicyDocument:
             Version: '2012-10-17'

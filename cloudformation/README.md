@@ -38,7 +38,7 @@ The AWS CloudFormation template will create following things:
 
     5. SageMaker Domain (GenAIBookBedrockSageMakerDomain): Creates a SageMaker domain that uses IAM authentication, with default user settings tied to the execution role (GenAIBookBedrockSageMakerExecutionRole). It also includes network configurations using the default VPC and subnet IDs.
 
-    6. SageMaker Execution Role (GenAIBookBedrockSageMakerExecutionRole): Defines an IAM role for executing SageMaker, Bedrock, and AOSS tasks. This role has attached policies granting broad access to SageMaker, Bedrock, AOSS, S3, and IAM services, though the template advises modification to adhere to the least privilege principle.
+    6. SageMaker Execution Role (GenAIBookBedrockSageMakerExecutionRole): Defines an IAM role for executing SageMaker, Bedrock, Lambda, DynamoDb and AOSS tasks. This role has attached policies granting broad access to SageMaker, Bedrock, AOSS, S3, and IAM services, though the template advises modification to adhere to the least privilege principle.
 
 **Outputs:**
 
