@@ -115,7 +115,7 @@ git clone < Git Repository Name>
 
 ### File Name: simple_rag_building_llama_index.ipynb
 ### Purpose: 
-        1. Create an Llama index
+        1. Create a Llama index
         2. Ingest and build the index
         3. Generating responses with RAG
 

@@ -99,7 +99,7 @@ git clone < Git Repository Name>
 
 5. Read and follow all the steps of **simple_converse_api.ipynb** file. 
 
-### File Name: simple_sagemaker_bedrock.ipynb
+### File Name: simple_converse_api.ipynb
 ### Purpose: 
     1. Understanding Amazon Bedrock client and Amazon Bedrock runtime client.
     2. Example of Amazon Titan LLM foundation model with and without parameters using the Converse API.
