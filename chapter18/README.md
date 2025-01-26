@@ -101,7 +101,7 @@ git clone < Git Repository Name>
 
 ### File Name: advanced_image_patterns_part1.ipynb
 ### Purpose: 
-         1. Perfecting Prompt for Image
+        1. Perfecting Prompt for Image
         2. Image Embedding
         3. Image to Image
 
